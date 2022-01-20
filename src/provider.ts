@@ -4,6 +4,7 @@ import {
   PolyjuiceJsonRpcProvider,
 } from "@polyjuice-provider/ethers";
 import { EventEmitter } from "stream";
+import { BigNumber } from "ethers";
 
 export class WrappedPolyjuiceProvider extends EventEmitter {
   polyjuiceProvider: PolyjuiceJsonRpcProvider;
@@ -27,16 +28,19 @@ export class WrappedPolyjuiceProvider extends EventEmitter {
     if (args.method === "eth_accounts") {
       return [this.polyjuiceWallet.address];
     }
-    if (args.method === "eth_sendTransaction") {
-      const params = args.params;
 
-      if (Array.isArray(params)) {
-        const result = await this.polyjuiceWallet.sendTransaction({
-          data: params[0].data,
-        });
-        return result.hash;
-      }
+    if (args.method === "eth_estimateGas") {
+      return { result: BigNumber.from("0x7d00") };
     }
+
+    if (args.method === "eth_sendTransaction") {
+      const params = args.params as any[];
+      const result = await this.polyjuiceWallet.sendTransaction({
+        data: params[0].data,
+      });
+      return result.hash;
+    }
+
     const result = await this.polyjuiceProvider.send(
       args.method,
       args.params as any[]
