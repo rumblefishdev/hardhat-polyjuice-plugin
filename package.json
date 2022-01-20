@@ -1,12 +1,12 @@
 {
-  "name": "hardhat-ts-plugin-boilerplate",
-  "version": "0.0.1",
-  "description": "Hardhat TypeScript plugin boilerplate",
-  "repository": "github:nomiclabs/hardhat-ts-plugin-boilerplate",
-  "author": "Nomic Labs LLC",
+  "name": "@rumblefishdev/hardhat-polyjuice-plugin",
+  "version": "0.1.1",
+  "description": "Deploy to godwoken network using hardhat-deploy",
+  "repository": "github:rumblefishdev/hardhat-polyjuice-plugin",
+  "author": "Rumblefish Software Development",
   "license": "MIT",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "keywords": [
     "ethereum",
     "smart-contracts",
@@ -28,12 +28,13 @@
     "README.md"
   ],
   "devDependencies": {
+    "@polyjuice-provider/ethers": "^0.1.3",
     "@types/chai": "^4.1.7",
     "@types/fs-extra": "^5.0.4",
     "@types/mocha": "^5.2.6",
     "@types/node": "^8.10.38",
     "chai": "^4.2.0",
-    "hardhat": "^2.0.0",
+    "hardhat": "^2.6.0",
     "mocha": "^7.1.2",
     "prettier": "2.0.5",
     "ts-node": "^8.1.0",
@@ -43,6 +44,6 @@
     "typescript": "^4.0.3"
   },
   "peerDependencies": {
-    "hardhat": "^2.0.0"
+    "hardhat": "^2.6.0"
   }
 }
