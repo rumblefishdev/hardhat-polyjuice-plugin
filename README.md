@@ -1,58 +1,92 @@
-# Hardhat TypeScript plugin boilerplate
+# hardhat-polyjuice-plugin
 
-This is a sample Hardhat plugin written in TypeScript. Creating a Hardhat plugin
-can be as easy as extracting a part of your config into a different file and
-publishing it to npm.
+A plugin that allows hardhat-deploy integration with godwoken network using [Polyjuice Provider](https://github.com/nervosnetwork/polyjuice-provider)
 
-This sample project contains an example on how to do that, but also comes with
-many more features:
+## What
 
-- A mocha test suite ready to use
-- TravisCI already setup
-- A package.json with scripts and publishing info
-- Examples on how to do different things
+The goal of the plugin is to have the ability to take existing Ethereum Hardhat codebase and port it to Nervos Layer 2 network only by adding the plugin into existing codebase. All Hardhat commands and execution of Hardhat scripts used ex. for deployment should work after adding the plugin.
+
+## Known Caveats(things you should be careful about!!)
+
+- because `polyjuice-provider` doesn't support transfer of ethers, `deterministicDeployment` is not supported by this plugin now
+
+- make sure that you first import `hardhat-deploy` in your config. This way the plugin will inject convertion of deploy arguments, so it supports using eth addresses and works well with `ethers`
+
+- the following `gw_get_account_id_by_script_hash` Error is known to be a random error. Just restart the deployments and it should fine.
+
+```bash
+Error: result from jsonRPC gw_get_account_id_by_script_hash is null or undefined. unable to fetch account id from script hash 0x73d89c5d14c9d71bd9380f98fee2337dc517d19f3e41288ee9f78d25ed3e3aaf
+```
+
+you can learn more about that [here](https://github.com/nervosnetwork/polyjuice-provider#known-caveatsthings-you-should-be-careful-about-)
 
 ## Installation
 
-To start working on your project, just run
-
 ```bash
-npm install
+npm install @rumblefishdev/hardhat-polyjuice-plugin hardhat-deploy
 ```
 
-## Plugin development
+Import the plugin in your `hardhat.config.js`. Make sure that it's imported **after** `hardhat-deploy`:
 
-Make sure to read our [Plugin Development Guide](https://hardhat.org/advanced/building-plugins.html) to learn how to build a plugin.
+```js
+require("hardhat-deploy");
+require("@rumblefishdev/hardhat-polyjuice-plugin");
+```
 
-## Testing
+Or if you are using TypeScript, in your `hardhat.config.ts`:
 
-Running `npm run test` will run every test located in the `test/` folder. They
-use [mocha](https://mochajs.org) and [chai](https://www.chaijs.com/),
-but you can customize them.
+```ts
+import "hardhat-deploy";
+import "@rumblefishdev/hardhat-polyjuice-plugin";
+```
 
-We recommend creating unit tests for your own modules, and integration tests for
-the interaction of the plugin with Hardhat and its dependencies.
+## Required plugins
 
-## Linting and autoformat
+- [hardhat-deploy](https://github.com/wighawag/hardhat-deploy)
 
-All of Hardhat projects use [prettier](https://prettier.io/) and
-[tslint](https://palantir.github.io/tslint/).
+## Tasks
 
-You can check if your code style is correct by running `npm run lint`, and fix
-it with `npm run lint:fix`.
+This plugin creates no additional tasks.
 
-## Building the project
+## Configuration
 
-Just run `npm run build` ️👷
+This plugin extends the `HardhatUserConfig`'s `NetworkConfig` object with optional fields:
 
-## README file
+- `rollupTypeHash`,
+- `ethAccountLockCodeHash`,
+- `privateKey`
 
-This README describes this boilerplate project, but won't be very useful to your
-plugin users.
+This is an example of how to set it in `hardhat.config.ts`:
 
-Take a look at `README-TEMPLATE.md` for an example of what a Hardhat plugin's
-README should look like.
+```ts
+export const config: HardhatUserConfig = {
+  network: {
+    godwoken: {
+      url: "http://localhost:8024",
+      ethAccountLockCodeHash:
+        "0xf96d799a3c90ac8e153ddadd1747c6067d119a594f7f1c4b1fffe9db0f304335",
+      rollupTypeHash:
+        "0x828b8a63f97e539ddc79e42fa62dac858c7a9da222d61fc80f0d61b44b5af5d4",
+      privateKey: process.env.PRIVATE_KEY,
+    },
+  },
+};
+```
 
-## Migrating from Buidler?
+You can find `ethAccountLockCodeHash`, `rollupTypeHash` and `url` on [localhost:6100](http://localhost:6100), if you're using [godwoken-kicker](https://github.com/RetricSu/godwoken-kicker), or [https://dev.ckb.tools/](https://dev.ckb.tools/).
 
-Take a look at [the migration guide](MIGRATION.md)!
+## Usage
+
+All set! You can run
+
+```bash
+npx hardhat deploy --network godwoken
+```
+
+or
+
+```bash
+yarn hardhat deploy --network godwoken
+```
+
+to deploy your contracts.
