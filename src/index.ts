@@ -1,8 +1,13 @@
 import { extendEnvironment, extendConfig } from "hardhat/config";
-import { HardhatConfig, HardhatUserConfig } from "hardhat/types";
+import {
+  HardhatConfig,
+  HardhatRuntimeEnvironment,
+  HardhatUserConfig,
+} from "hardhat/types";
 import { BackwardsCompatibilityProviderAdapter } from "hardhat/internal/core/providers/backwards-compatibility";
-import "./type-extensions";
 import { WrappedPolyjuiceProvider } from "./provider";
+import { patchDeploy } from "./deploy";
+import "./type-extensions";
 
 extendConfig(
   (config: HardhatConfig, userConfig: Readonly<HardhatUserConfig>) => {
@@ -22,13 +27,23 @@ extendConfig(
   }
 );
 
-extendEnvironment((hre) => {
+extendEnvironment((hre: HardhatRuntimeEnvironment) => {
   const { network } = hre;
   if (network.name === "godwoken") {
+    if (
+      !network.config.rollupTypeHash ||
+      !network.config.ethAccountLockCodeHash
+    ) {
+      throw new Error("Please provide godwoken network config!");
+    }
     const wrappedPolyjuiceProvider = new WrappedPolyjuiceProvider(
       network.config.url!,
+      network.config.rollupTypeHash,
+      network.config.ethAccountLockCodeHash,
       network.config.privateKey!
     );
+
+    patchDeploy(hre, wrappedPolyjuiceProvider);
 
     hre.network.provider = new BackwardsCompatibilityProviderAdapter(
       wrappedPolyjuiceProvider

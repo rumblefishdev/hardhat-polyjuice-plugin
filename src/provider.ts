@@ -4,15 +4,20 @@ import {
   PolyjuiceJsonRpcProvider,
 } from "@polyjuice-provider/ethers";
 import { EventEmitter } from "stream";
-import { BigNumber } from "ethers";
+import omit from "lodash/omit";
 
 export class WrappedPolyjuiceProvider extends EventEmitter {
   polyjuiceProvider: PolyjuiceJsonRpcProvider;
   polyjuiceWallet: PolyjuiceWallet;
 
-  constructor(web3Url: string, privateKey: string) {
+  constructor(
+    web3Url: string,
+    rollupTypeHash: string,
+    ethAccountLockCodeHash: string,
+    privateKey: string
+  ) {
     super();
-    const polyjuiceConfig = { web3Url };
+    const polyjuiceConfig = { web3Url, rollupTypeHash, ethAccountLockCodeHash };
     this.polyjuiceProvider = new PolyjuiceJsonRpcProvider(
       polyjuiceConfig,
       polyjuiceConfig.web3Url
@@ -29,15 +34,16 @@ export class WrappedPolyjuiceProvider extends EventEmitter {
       return [this.polyjuiceWallet.address];
     }
 
-    if (args.method === "eth_estimateGas") {
-      return { result: BigNumber.from("0x7d00") };
-    }
+    // if (args.method === "eth_estimateGas") {
+    //   return BigNumber.from("0x7d00");
+    // }
 
     if (args.method === "eth_sendTransaction") {
       const params = args.params as any[];
-      const result = await this.polyjuiceWallet.sendTransaction({
-        data: params[0].data,
-      });
+      const newParams = { ...omit(params[0], "gas") };
+
+      const result = await this.polyjuiceWallet.sendTransaction(newParams);
+
       return result.hash;
     }
 
@@ -45,6 +51,10 @@ export class WrappedPolyjuiceProvider extends EventEmitter {
       args.method,
       args.params as any[]
     );
+    // console.log({ result });
+    // if (result && Object.keys(result).includes("failed_reason")) {
+    //   throw new Error("dupa");
+    // }
     return result;
   }
 }
