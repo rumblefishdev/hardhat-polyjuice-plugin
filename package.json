@@ -1,17 +1,56 @@
 {
   "name": "@rumblefishdev/hardhat-polyjuice-plugin",
-  "version": "0.0.3",
-  "description": "",
-  "main": "index.js",
+  "version": "0.1.1",
+  "description": "Deploy to godwoken network using hardhat-deploy",
+  "repository": "github:rumblefishdev/hardhat-polyjuice-plugin",
+  "author": "Rumblefish Software Development",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "keywords": [
+    "ethereum",
+    "smart-contracts",
+    "hardhat",
+    "hardhat-plugin"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint:fix": "prettier --write 'src/**/*.{js,ts}' 'test/**/*.{js,ts}' && tslint --fix --config tslint.json --project tsconfig.json",
+    "lint": "tslint --config tslint.json --project tsconfig.json",
+    "test": "mocha --exit --recursive 'test/**/*.test.ts'",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "prepublishOnly": "npm run build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/rumblefishdev/hardhat-polyjuice-plugin.git"
+  "files": [
+    "dist/src/",
+    "src/",
+    "LICENSE",
+    "README.md"
+  ],
+  "devDependencies": {
+    "@polyjuice-provider/ethers": "^0.1.3",
+    "@types/chai": "^4.1.7",
+    "@types/fs-extra": "^5.0.4",
+    "@types/lodash": "^4.14.178",
+    "@types/mocha": "^5.2.6",
+    "@types/node": "^8.10.38",
+    "chai": "^4.2.0",
+    "ethers": "^5.5.3",
+    "hardhat": "^2.6.0",
+    "hardhat-deploy": "^0.9.28",
+    "lodash": "^4.17.21",
+    "mocha": "^7.1.2",
+    "prettier": "2.0.5",
+    "ts-node": "^8.1.0",
+    "tslint": "^5.16.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "typescript": "^4.0.3"
   },
-  "author": "",
-  "license": "ISC",
+  "peerDependencies": {
+    "hardhat": "^2.6.0",
+    "hardhat-deploy": "^0.9.28"
+  },
   "bugs": {
     "url": "https://github.com/rumblefishdev/hardhat-polyjuice-plugin/issues"
   },
