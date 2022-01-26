@@ -22,7 +22,7 @@
     "prepublishOnly": "npm run build"
   },
   "files": [
-    "dist/src/",
+    "dist/",
     "src/",
     "LICENSE",
     "README.md"
