@@ -20,27 +20,25 @@ extendConfig(
         continue;
       }
       const network = userNetworks[networkName]!;
-      if (network.privateKey) {
-        config.networks[networkName].privateKey = network.privateKey;
+      if (network.godwokenConfig) {
+        config.networks[networkName].godwokenConfig = network.godwokenConfig;
       }
     }
   }
 );
 
 extendEnvironment((hre: HardhatRuntimeEnvironment) => {
-  const { network } = hre;
-  if (network.name === "godwoken") {
-    if (
-      !network.config.rollupTypeHash ||
-      !network.config.ethAccountLockCodeHash
-    ) {
-      throw new Error("Please provide godwoken network config!");
-    }
+  const { godwokenConfig } = hre.network.config;
+  if (godwokenConfig) {
+    const polyjuiceConfig = {
+      web3Url: godwokenConfig.url,
+      rollupTypeHash: godwokenConfig.rollupTypeHash,
+      ethAccountLockCodeHash: godwokenConfig.ethAccountLockCodeHash,
+    };
+
     const wrappedPolyjuiceProvider = new WrappedPolyjuiceProvider(
-      network.config.url!,
-      network.config.rollupTypeHash,
-      network.config.ethAccountLockCodeHash,
-      network.config.privateKey!
+      polyjuiceConfig,
+      godwokenConfig.privateKey
     );
 
     patchDeploy(hre, wrappedPolyjuiceProvider);

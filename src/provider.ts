@@ -11,13 +11,14 @@ export class WrappedPolyjuiceProvider extends EventEmitter {
   polyjuiceWallet: PolyjuiceWallet;
 
   constructor(
-    web3Url: string,
-    rollupTypeHash: string,
-    ethAccountLockCodeHash: string,
+    polyjuiceConfig: {
+      web3Url: string;
+      rollupTypeHash: string;
+      ethAccountLockCodeHash: string;
+    },
     privateKey: string
   ) {
     super();
-    const polyjuiceConfig = { web3Url, rollupTypeHash, ethAccountLockCodeHash };
     this.polyjuiceProvider = new PolyjuiceJsonRpcProvider(
       polyjuiceConfig,
       polyjuiceConfig.web3Url

@@ -1,26 +1,23 @@
 import "hardhat/types/config";
 
 declare module "hardhat/types/config" {
+  export interface godwokenUserConfig {
+    url: string;
+    privateKey: string;
+    rollupTypeHash: string;
+    ethAccountLockCodeHash: string;
+  }
   export interface HttpNetworkUserConfig {
-    privateKey?: string;
-    rollupTypeHash?: string;
-    ethAccountLockCodeHash?: string;
+    godwokenConfig?: godwokenUserConfig;
   }
   export interface HardhatNetworkUserConfig {
-    privateKey?: string;
-    rollupTypeHash?: string;
-    ethAccountLockCodeHash?: string;
+    godwokenConfig?: godwokenUserConfig;
   }
 
   export interface HttpNetworkConfig {
-    privateKey?: string;
-    rollupTypeHash?: string;
-    ethAccountLockCodeHash?: string;
+    godwokenConfig?: godwokenUserConfig;
   }
   export interface HardhatNetworkConfig {
-    url?: string;
-    privateKey?: string;
-    rollupTypeHash?: string;
-    ethAccountLockCodeHash?: string;
+    godwokenConfig?: godwokenUserConfig;
   }
 }

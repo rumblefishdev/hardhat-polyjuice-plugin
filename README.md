@@ -62,12 +62,12 @@ This is an example of how to set it in `hardhat.config.ts`:
 export const config: HardhatUserConfig = {
   network: {
     godwoken: {
-      url: "http://localhost:8024",
-      ethAccountLockCodeHash:
-        "0xf96d799a3c90ac8e153ddadd1747c6067d119a594f7f1c4b1fffe9db0f304335",
-      rollupTypeHash:
-        "0x828b8a63f97e539ddc79e42fa62dac858c7a9da222d61fc80f0d61b44b5af5d4",
-      privateKey: process.env.PRIVATE_KEY,
+      godwokenConfig: {
+        url: string;
+        privateKey: string;
+        rollupTypeHash: string;
+        ethAccountLockCodeHash: string;
+      }
     },
   },
 };
