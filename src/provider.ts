@@ -35,27 +35,23 @@ export class WrappedPolyjuiceProvider extends EventEmitter {
       return [this.polyjuiceWallet.address];
     }
 
-    // if (args.method === "eth_estimateGas") {
-    //   return BigNumber.from("0x7d00");
-    // }
+    try {
+      if (args.method === "eth_sendTransaction") {
+        const params = args.params as any[];
+        const newParams = { ...omit(params[0], "gas") };
 
-    if (args.method === "eth_sendTransaction") {
-      const params = args.params as any[];
-      const newParams = { ...omit(params[0], "gas") };
+        const result = await this.polyjuiceWallet.sendTransaction(newParams);
 
-      const result = await this.polyjuiceWallet.sendTransaction(newParams);
+        return result.hash;
+      }
 
-      return result.hash;
+      const result = await this.polyjuiceProvider.send(
+        args.method,
+        args.params as any[]
+      );
+      return result;
+    } catch (e) {
+      console.trace(e);
     }
-
-    const result = await this.polyjuiceProvider.send(
-      args.method,
-      args.params as any[]
-    );
-    // console.log({ result });
-    // if (result && Object.keys(result).includes("failed_reason")) {
-    //   throw new Error("dupa");
-    // }
-    return result;
   }
 }

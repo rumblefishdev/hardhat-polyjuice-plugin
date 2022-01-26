@@ -2,7 +2,6 @@ import "hardhat/types/config";
 
 declare module "hardhat/types/config" {
   export interface godwokenUserConfig {
-    url: string;
     privateKey: string;
     rollupTypeHash: string;
     ethAccountLockCodeHash: string;
@@ -18,6 +17,7 @@ declare module "hardhat/types/config" {
     godwokenConfig?: godwokenUserConfig;
   }
   export interface HardhatNetworkConfig {
+    url?: string;
     godwokenConfig?: godwokenUserConfig;
   }
 }

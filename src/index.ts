@@ -31,7 +31,7 @@ extendEnvironment((hre: HardhatRuntimeEnvironment) => {
   const { godwokenConfig } = hre.network.config;
   if (godwokenConfig) {
     const polyjuiceConfig = {
-      web3Url: godwokenConfig.url,
+      web3Url: hre.network.config.url!,
       rollupTypeHash: godwokenConfig.rollupTypeHash,
       ethAccountLockCodeHash: godwokenConfig.ethAccountLockCodeHash,
     };
