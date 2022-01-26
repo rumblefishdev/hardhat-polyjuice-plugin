@@ -50,5 +50,9 @@
   "peerDependencies": {
     "hardhat": "^2.6.0",
     "hardhat-deploy": "^0.9.28"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/rumblefishdev/hardhat-polyjuice-plugin/issues"
+  },
+  "homepage": "https://github.com/rumblefishdev/hardhat-polyjuice-plugin#readme"
 }
