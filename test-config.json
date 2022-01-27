@@ -1,0 +1,6 @@
+{
+  "godwoken-kicker-path": "../godwoken-kicker",
+  "godwoken-url": "http://localhost:8024",
+  "godwoken-eth-address": "0x449AEaa80fE3040371fD83aca0EDBf6C0E46618B",
+  "godwoken-private-key": "0x53d6977c4e437f9663da13eeb3a21601368eb5918d28765f92abf38dd3d49baa"
+}

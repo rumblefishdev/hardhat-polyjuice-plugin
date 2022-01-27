@@ -90,3 +90,30 @@ yarn hardhat deploy --network godwoken
 ```
 
 to deploy your contracts.
+
+## Testing
+
+You can find the `tests/smoke-test` folder, created to check if an update in `godwoken` chain or `@polyjuice-provider/ethers` package breaks the plugin functionality.
+
+### Prerequisites
+
+- Clone the [godwoken-kicker](https://github.com/RetricSu/godwoken-kicker) repo, make sure that the path is the same as stated in `test-config.json`. You can also see there's a dummy ethereum account provided
+- [jq](https://stedolan.github.io/jq/download/)
+- [curl](https://curl.se/download.html)
+- [make](https://www.gnu.org/software/make/)
+
+### Run smoke-test
+
+Run
+
+```bash
+yarn smoke-test
+```
+
+It can take a while, especially if your godwoken is currently not up, it needs to build and run some containers. In that case, you will need to give the script root access (`make init` in `godwoken-kicker` requires that). The script will keep the chain running in case you want to try it several times. After you are done, run
+
+```bash
+yarn clean-up
+```
+
+to stop the containers.

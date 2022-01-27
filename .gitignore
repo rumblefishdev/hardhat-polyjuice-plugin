@@ -104,3 +104,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+tests/**/cache
+tests/**/deployments
+tests/**/artifacts
