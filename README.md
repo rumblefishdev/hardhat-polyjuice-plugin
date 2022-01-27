@@ -62,8 +62,8 @@ This is an example of how to set it in `hardhat.config.ts`:
 export const config: HardhatUserConfig = {
   network: {
     godwoken: {
+      url: string;
       godwokenConfig: {
-        url: string;
         privateKey: string;
         rollupTypeHash: string;
         ethAccountLockCodeHash: string;
