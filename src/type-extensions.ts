@@ -5,6 +5,7 @@ declare module "hardhat/types/config" {
     privateKey: string;
     rollupTypeHash: string;
     ethAccountLockCodeHash: string;
+    delayAfterDeploy?: boolean | Number;
   }
   export interface HttpNetworkUserConfig {
     godwokenConfig?: godwokenUserConfig;

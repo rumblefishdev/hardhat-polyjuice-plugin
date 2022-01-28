@@ -24,8 +24,19 @@ export const patchDeploy = (
         contractArtifact.bytecode
       );
     }
+    const result = await oldDeploy(name, options);
+    const delayAfterDeploy = hre.network.config.godwokenConfig.delayAfterDeploy;
 
-    return oldDeploy(name, options);
+    if (delayAfterDeploy) {
+      await new Promise((resolve) =>
+        setTimeout(
+          resolve,
+          delayAfterDeploy === true ? 10000 : delayAfterDeploy
+        )
+      );
+    }
+
+    return result;
   };
   hre.deployments.deploy = newDeploy;
 };
