@@ -14,7 +14,6 @@ if [ -z "$GODWOKEN__IS_CHAIN_UP" ]; then
   pushd $GODWOKEN__KICKER_PATH
 
   make stop
-  sudo make clean
   make init
   make start
 
