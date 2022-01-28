@@ -1,8 +1,5 @@
 import "hardhat-deploy";
 import "../../src";
-import { config as dotEnvConfig } from "dotenv";
-
-dotEnvConfig();
 
 const config = {
   solidity: "0.8.9",

@@ -1,4 +1,4 @@
-GODWOKEN__KICKER_PATH=$(cat test-config.json | jq '."godwoken-kicker-path"' | tr -d '"')
+GODWOKEN__KICKER_PATH=$(cat test-config.json | jq '."godwoken-kicker-path"' -r)
 
 echo $GODWOKEN__KICKER_PATH
 

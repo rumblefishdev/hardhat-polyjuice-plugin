@@ -1,9 +1,10 @@
 #!/usr/bin/bash
 set -e
 
-GODWOKEN__KICKER_PATH=$(cat test-config.json | jq '."godwoken-kicker-path"' | tr -d '"')
-GODWOKEN__ETH_ADDRESS=$(cat test-config.json | jq '."godwoken-eth-address"' | tr -d '"')
-GODWOKEN__PRIVATE_KEY=$(cat test-config.json | jq '."godwoken-private-key"' | tr -d '"')
+GODWOKEN__KICKER_PATH=$(cat test-config.json | jq '."godwoken-kicker-path"' -r)
+GODWOKEN__ETH_ADDRESS=$(cat test-config.json | jq '."godwoken-eth-address"' -r)
+export GODWOKEN__PRIVATE_KEY=$(cat test-config.json | jq '."godwoken-private-key"' -r)
+export GODWOKEN__URL=$(cat test-config.json | jq '."godwoken-url"' -r)
 
 set +e
 GODWOKEN__IS_CHAIN_UP=$(curl -s localhost:6101 | jq .status)
@@ -12,7 +13,9 @@ set -e
 if [ -z "$GODWOKEN__IS_CHAIN_UP" ]; then
   pushd $GODWOKEN__KICKER_PATH
 
-  sudo make init
+  make stop
+  sudo make clean
+  make init
   make start
 
   # deposit 400 CKB to a deployer account
@@ -21,8 +24,8 @@ if [ -z "$GODWOKEN__IS_CHAIN_UP" ]; then
   popd
 fi
 
-GODWOKEN__ETH_ACCOUNT_LOCK_CODE_HASH=$(curl -s http://localhost:6101/get_eth_account_lock | jq '.data.code_hash')
-GODWOKEN__ROLLUP_TYPE_HASH=$(curl -s http://localhost:6101/get_rollup_type_hash | jq '.data')
+export GODWOKEN__ETH_ACCOUNT_LOCK_CODE_HASH=$(curl -s http://localhost:6101/get_eth_account_lock | jq '.data.code_hash' -r)
+export GODWOKEN__ROLLUP_TYPE_HASH=$(curl -s http://localhost:6101/get_rollup_type_hash | jq '.data' -r)
 
 pushd "tests/smoke-test"
 
